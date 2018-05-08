@@ -35,6 +35,22 @@ pipeline {
                 }
             }
         }
+        stage('Build in Develop') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo 'Init Build stage'
+                  // Run the maven build
+                script{
+                    if (isUnix()) {
+                        sh "'mvn' -Dmaven.test.failure.ignore clean verify"
+                    } else {
+                        bat(/"mvn" -Dmaven.test.failure.ignore clean package/)
+                    }
+                }
+            }
+        }
         stage('Test') {
             steps {
                 echo 'Init Test stage'
@@ -46,6 +62,17 @@ pipeline {
             }
             steps {
                 echo 'Init Deploy stage'
+		script{
+                	currentBuild.result = 'SUCCESS'
+		}
+            }
+        }
+        stage('Deploy in develop') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo 'Init Deploy stage in develop'
 		script{
                 	currentBuild.result = 'SUCCESS'
 		}
