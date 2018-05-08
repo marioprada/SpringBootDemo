@@ -47,7 +47,6 @@ pipeline {
             steps {
                 echo 'Init Deploy stage'
                 currentBuild.result = 'SUCCESS'
-                }
             }
         }
     }
